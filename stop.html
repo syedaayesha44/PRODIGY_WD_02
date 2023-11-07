@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(to right, #00b4db, #0083b0); /* an attractive background */
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #0083b0;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .timer span {
+            display: inline-block;
+            min-width: 60px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .buttons button {
+            background: #0083b0;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+
+        .buttons button:hover {
+            background: #00b4db;
+        }
+
+        .buttons button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stopwatch</h1> <!-- an heading of stopwatch -->
+        <div class="timer">
+            <span id="hours">00</span>:
+            <span id="minutes">00</span>:
+            <span id="seconds">00</span>.
+            <span id="milliseconds">000</span>
+        </div>
+        <div class="buttons">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+    <script>
+        // Get the elements
+        const hours = document.getElementById("hours");
+        const minutes = document.getElementById("minutes");
+        const seconds = document.getElementById("seconds");
+        const milliseconds = document.getElementById("milliseconds");
+        const start = document.getElementById("start");
+        const stop = document.getElementById("stop");
+        const reset = document.getElementById("reset");
+
+        // Initialize the variables
+        let h = 0;
+        let m = 0;
+        let s = 0;
+        let ms = 0;
+        let interval = null;
+        let running = false;
+
+        // Define the functions
+        function startTimer() {
+            if (!running) {
+                running = true;
+                interval = setInterval(updateTimer, 10);
+            }
+        }
+
+        function stopTimer() {
+            if (running) {
+                running = false;
+                clearInterval(interval);
+            }
+        }
+
+        function resetTimer() {
+            stopTimer();
+            h = 0;
+            m = 0;
+            s = 0;
+            ms = 0;
+            hours.textContent = "00";
+            minutes.textContent = "00";
+            seconds.textContent = "00";
+            milliseconds.textContent = "000";
+        }
+
+        function updateTimer() {
+            ms++;
+            if (ms > 99) {
+                ms = 0;
+                s++;
+                if (s > 59) {
+                    s = 0;
+                    m++;
+                    if (m > 59) {
+                        m = 0;
+                        h++;
+                    }
+                }
+            }
+            hours.textContent = formatTime(h);
+            minutes.textContent = formatTime(m);
+            seconds.textContent = formatTime(s);
+            milliseconds.textContent = formatTime(ms, 3);
+        }
+
+        function formatTime(num, digits = 2) {
+            return num.toString().padStart(digits, "0");
+        }
+
+        // Add the event listeners
+        start.addEventListener("click", startTimer);
+        stop.addEventListener("click", stopTimer);
+        reset.addEventListener("click", resetTimer);
+    </script>
+</body>
+</html>
